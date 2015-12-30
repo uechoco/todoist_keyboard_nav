@@ -14,7 +14,7 @@
   "content_scripts": [
     {
       "js": [ "js/content.js" ],
-      "matches": [ "https://todoist.com/app*" ],
+      "matches": [ "https://todoist.com/app*", "https://*.todoist.com/app*" ],
       "run_at": "document_start"
     }
   ]

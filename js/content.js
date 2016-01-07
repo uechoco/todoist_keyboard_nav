@@ -1,12 +1,15 @@
 
 const KEY = {
+  TAB:9, ESC:27,
+  LEFT:37, UP:38, RIGHT:39, DOWN:40,
   F: 70, G:71, I:73, L:76,
-  P: 80, T:84, W:87
+  P: 80, T:84, W:87, X:88,
 };
 
 const MODE = {
   ROOT: 'root',
-  GLOBAL: 'global'
+  GLOBAL: 'global',
+  LIST: 'list'
 };
 
 const LOG_MODE = {
@@ -18,7 +21,7 @@ const LOG_MODE = {
 }
 
 var doc = document;
-var log_mode = LOG_MODE.ERROR;
+var log_mode = LOG_MODE.DEBUG;
 
 var Logger = function() {
   var self = this;
@@ -34,25 +37,51 @@ var Logger = function() {
 var logger = new Logger();
 
 /**
+ * insert mode_label
+ */
+(function() {
+  var quickFindElem = doc.querySelector('div#quick_find');
+  var elem = document.createElement('div');
+  elem.id = 'tkn_mode_label';
+  quickFindElem.insertBefore(elem, quickFindElem.firstChild);
+})();
+
+var changeModeLabel = function(label) {
+  var modeLabelElem = doc.querySelector('div#tkn_mode_label');
+  modeLabelElem.innerHTML = label;
+};
+
+/**
  * mode classes
  *
  * - RootMode
  *   - GlobalMode
+ *   - ListMode
  */
 var RootMode = function() {
   var self = this;
+  this.name = MODE.ROOT;
   this.keydown = function(e) {
     switch (e.keyCode) {
       case KEY.G:
         e.preventDefault();
         changeMode(MODE.GLOBAL);
         break;
+      case KEY.L:
+        e.preventDefault();
+        changeMode(MODE.LIST);
+        break;
     }
-  }
+  };
+  this.onEnterMode = function() {
+    changeModeLabel('---');
+  };
+  this.onLeaveMode = function(nextMode) {};
 };
 
 var GlobalMode = function() {
   var self = this;
+  this.name = MODE.GLOBAL;
   this.keydown = function(e) {
     switch (e.keyCode) {
       case KEY.I: // Filter Inbox
@@ -89,20 +118,52 @@ var GlobalMode = function() {
         changeMode(MODE.ROOT);
         break;
     }
-  }
+  };
+  this.onEnterMode = function() {
+    changeModeLabel(this.name);
+  };
+  this.onLeaveMode = function(nextMode) {};
+};
+
+var ListMode = function() {
+  var self = this;
+  this.name = MODE.LIST;
+  this.keydown = function(e) {
+    switch (e.keyCode) {
+      case KEY.G:
+        e.preventDefault();
+        changeMode(MODE.GLOBAL);
+        break;
+      case KEY.ESC:
+        e.preventDefault();
+        changeMode(MODE.ROOT);
+        break;
+      default:
+        logger.d('ListMode.keydown', e.keyCode);
+        break;
+    }
+  };
+  this.onEnterMode = function() {
+    changeModeLabel(this.name);
+  };
+  this.onLeaveMode = function(nextMode) {};
 };
 
 var modeCache = {
   root  : new RootMode(),
-  global: new GlobalMode()
+  global: new GlobalMode(),
+  list  : new ListMode()
 };
-var mode = modeCache.root;
-
-
+var mode = undefined;
 var changeMode = function(modeName) {
+  if (mode) {
+    mode.onLeaveMode(modeName);
+  }
   mode = modeCache[modeName];
+  mode.onEnterMode();
   logger.d('changeMode', modeName);
-}
+};
+changeMode(MODE.ROOT);
 
 var keydown = function(e) {
   // don't invoke when current focused element is for input.

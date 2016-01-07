@@ -1,0 +1,12 @@
+div#tkn_mode_label {
+    position: absolute;
+    border: solid 1px #990000;
+    background-color: #ee0000;
+    margin-top: -6px;
+    margin-left: -32px;
+    width: 32px;
+    height: 15px;
+    font-size: 10px;
+    color: #ffffff;
+    z-index: 1;
+}

@@ -15,9 +15,10 @@
 
   "content_scripts": [
     {
+      "css": [ "css/main.css" ],
       "js": [ "js/content.js" ],
       "matches": [ "https://todoist.com/app*", "https://*.todoist.com/app*" ],
-      "run_at": "document_start"
+      "run_at": "document_idle"
     }
   ]
 }

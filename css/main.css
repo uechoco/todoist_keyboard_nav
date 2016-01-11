@@ -10,3 +10,12 @@ div#tkn_mode_label {
     color: #ffffff;
     z-index: 1;
 }
+
+div.tkn_selector {
+    position: absolute;
+    background-color: red;
+    width: 5px;
+    margin-top:13px;
+    margin-left:-30px;
+    height: 7px;
+}

@@ -145,8 +145,22 @@ var ListMode = function() {
   };
   this.onEnterMode = function() {
     changeModeLabel(this.name);
+
+    var taskItemNodeList = doc.querySelectorAll('div.list_editor ul.items li.task_item.menu_clickable');
+    for (var i = 0; i < taskItemNodeList.length; ++i) {
+      var taskItemLiElem = taskItemNodeList[i];
+      var selectorElem = document.createElement('div');
+      selectorElem.className = 'tkn_selector';
+      selectorElem.innerHTML = '.';
+      taskItemLiElem.insertBefore(selectorElem, taskItemLiElem.firstChild);
+    }
   };
-  this.onLeaveMode = function(nextMode) {};
+  this.onLeaveMode = function(nextMode) {
+    var selectorNodeList = doc.querySelectorAll('div.list_editor ul.items li.task_item.menu_clickable div.tkn_selector');
+    for (var i = 0; i < selectorNodeList.length; ++i) {
+      selectorNodeList[i].remove();
+    }
+  };
 };
 
 var modeCache = {

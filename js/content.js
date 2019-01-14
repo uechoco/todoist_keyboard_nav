@@ -57,32 +57,32 @@ var GlobalMode = function() {
     switch (e.keyCode) {
       case KEY.I: // Filter Inbox
         e.preventDefault();
-        var elem = doc.querySelector('img.cmp_filter_inbox').parentElement.click();
+        var elem = doc.querySelector('#top_filters li[data-track=\'navigation|inbox\']').click();
         changeMode(MODE.ROOT);
         break;
       case KEY.T: // Filter Today
         e.preventDefault();
-        var elem = doc.querySelector('img.cmp_filter_today').parentElement.click();
+        var elem = doc.querySelector('#top_filters li[data-track=\'navigation|today\']').click();
         changeMode(MODE.ROOT);
         break;
       case KEY.W: // Filter Next 7 Days (weekly)
         e.preventDefault();
-        var elem = doc.querySelector('img.cmp_filter_days').parentElement.click();
+        var elem = doc.querySelector('#top_filters li[data-track=\'navigation|next_7_days\']').click();
         changeMode(MODE.ROOT);
         break;
-      case KEY.P: // Control Projects
+      case KEY.P: // Toggle Open/Close Projects
         e.preventDefault();
-        var elem = doc.querySelector('td.control.projects').click();
+        var elem = doc.querySelector('#list_holder div[data-track=\'navigation|projects_panel\']').click();
         changeMode(MODE.ROOT);
         break;
-      case KEY.F: // Control Filters
+      case KEY.F: // Toggle Open/Close Filters
         e.preventDefault();
-        var elem = doc.querySelector('td.control.filters').click();
+        var elem = doc.querySelector('#list_holder div[data-track=\'navigation|filters_panel\']').click();
         changeMode(MODE.ROOT);
         break;
-      case KEY.L: // Control Labels
+      case KEY.L: // Toggle Open/Close Labels
         e.preventDefault();
-        var elem = doc.querySelector('td.control.labels').click();
+        var elem = doc.querySelector('#list_holder div[data-track=\'navigation|labels_panel\']').click();
         changeMode(MODE.ROOT);
         break;
       default:

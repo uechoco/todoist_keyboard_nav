@@ -2,13 +2,14 @@
 const KEY = {
   NUM_0: 48, NUM_1: 49, NUM_2: 50, NUM_3: 51, NUM_4: 52,
   NUM_5: 53, NUM_6: 54, NUM_7: 55, NUM_8: 56, NUM_9: 57,
-  F: 70, G:71, I:73, L:76,
+  A: 65, F: 70, G:71, I:73, L:76, N: 78,
   P: 80, T:84, W:87
 };
 
 const MODE = {
   ROOT: 'root',
-  GLOBAL: 'global'
+  GLOBAL: 'global',
+  ASTERISK: 'asterisk'
 };
 
 const LOG_MODE = {
@@ -48,6 +49,13 @@ var RootMode = function() {
       case KEY.G:
         e.preventDefault();
         changeMode(MODE.GLOBAL);
+        break;
+    }
+    switch (e.key)
+    {
+      case '*':
+        e.preventDefault();
+        changeMode(MODE.ASTERISK);
         break;
     }
   }
@@ -112,16 +120,64 @@ var GlobalMode = function() {
   }
 };
 
+
+var AsteriskMode = function() {
+  var self = this;
+  this.keydown = function(e) {
+    switch (e.keyCode) {
+      case KEY.A: // Select All
+        e.preventDefault();
+        var firstItemList = doc.querySelector('#editor ul.items'); // only focued to the first item list
+        if (firstItemList) {
+          var elemList = firstItemList.querySelectorAll('li.task_item.menu_clickable');
+          if (elemList && elemList.length > 0) {
+            setModeLock(true);
+            var mouseEvent = new MouseEvent("mousedown", {
+              button: 0, // Main button pressed (usually the left button) or un-initialized
+              buttons: 1, // 	Main button pressed (usually the left button)
+              shiftKey: true
+            });
+            elemList.forEach(function(elem){
+              elem.dispatchEvent(mouseEvent);
+            });
+            setModeLock(false);
+          }
+        }
+        break;
+      case KEY.N: // Deselect All (via item_selecor)
+        e.preventDefault();
+        var deselectItemsElem = doc.querySelector('#item_selecter a.deselect_items');
+        if (deselectItemsElem) {
+          deselectItemsElem.click();
+        }
+        break;
+      default:
+        break;
+    }
+    changeMode(MODE.ROOT);
+  }
+};
+
 var modeCache = {
   root  : new RootMode(),
-  global: new GlobalMode()
+  global: new GlobalMode(),
+  asterisk: new AsteriskMode()
 };
 var mode = modeCache.root;
+var modeLock = false;
 
+
+var setModeLock = function(bLock) {
+  modeLock = bLock ? true : false;
+};
 
 var changeMode = function(modeName) {
-  mode = modeCache[modeName];
-  logger.d('changeMode', modeName);
+  if (modeLock) {
+    logger.d('changeMode', 'The modeLock enabled. Cant change mode to ' + modeName);
+  } else {
+    mode = modeCache[modeName];
+    logger.d('changeMode', 'Changed mode to ' + modeName);
+  }
 }
 
 var keydown = function(e) {

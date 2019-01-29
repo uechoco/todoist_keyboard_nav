@@ -2,6 +2,10 @@
 
 The Google Chrome extension to enable you to operate todoist.com with the keyboard.
 
+Chrome Extension Stats: [![Chrome Rating](https://img.shields.io/chrome-web-store/rating/kglgmdpjkdbdgidekpklgkibnfgagejm.svg) ![Chrome Users](https://img.shields.io/chrome-web-store/users/kglgmdpjkdbdgidekpklgkibnfgagejm.svg)
+](https://chrome.google.com/webstore/detail/todoist-keyboard-navigato/kglgmdpjkdbdgidekpklgkibnfgagejm)
+
+
 ## supported keyboard shortcuts
 
 These keyboard shortcuts are inspired by the Gmail.
